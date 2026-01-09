@@ -1,301 +1,311 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Smartphone, Camera, Cpu, Battery, Layers, Monitor, 
-  CheckCircle2, Trophy, Zap, Info, ShieldCheck, 
-  Wind, Brain, Music, HardDrive, Target, Eye, Video,
-  Wifi, MousePointer2, ThermometerSun, Gamepad2
-} from 'lucide-react';
-
-const App = () => {
-  const [activeTab, setActiveTab] = useState('specs');
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-    document.body.style.overflowX = 'hidden';
-    const style = document.createElement('style');
-    style.innerHTML = `
-      ::-webkit-scrollbar { display: none; }
-      * { -ms-overflow-style: none; scrollbar-width: none; }
-      @keyframes slow-pan {
-        from { background-position: 0% 50%; }
-        to { background-position: 100% 50%; }
-      }
-      .animate-slow-pan {
-        background-size: 200% 200%;
-        animation: slow-pan 15s linear infinite alternate;
-      }
-    `;
-    document.head.appendChild(style);
-  }, []);
-
-  const xiaomi = {
-    name: "Xiaomi 17 Pro Max",
-    tagline: "L'Ogre de Pékin (Specs Hardware Max)",
-    ram: "16 Go LPDDR5X (8533 Mbps)",
-    storage: "512 Go UFS 4.1 (Vitesse record 4.5GB/s)",
-    chipset: "Snapdragon 8 Elite Gen 5 (3nm TSMC N3E)",
-    gpu: "Adreno 840 (Performance brute > A19 Pro)",
-    cooling: "Ice-Vapor Chamber 12,000mm² (Refroidissement Actif)",
-    ai: "HyperMind AI 3.0 (Automatisation totale de l'OS / Retouche Pro)",
-    display: "6.9\" LTPO 2.0 (C9 Luminescent - 3800 nits Peak)",
-    refresh: "120Hz + 3840Hz PWM (Zéro fatigue oculaire)",
-    battery: "7500 mAh (Silicium-Carbone Haute Densité)",
-    charging: "120W Filaire / 80W Sans-fil (22 min full)",
-    camera: "Sony LYT-900 (1 pouce) + Leica Summilux + Zoom 120x",
-    video: "8K 30fps / 4K 120fps (Sur tous les capteurs)",
-    audio: "Haut-parleurs symétriques 1.5cc (Harman Kardon tuned)",
-    build: "Céramique Unibody + Châssis Alu Aéronautique",
-    wifi: "Wi-Fi 7 (Vitesse triple antenne)",
-    button: "Bouton Action Programmable (Macro / App)",
-    scoreGaming: 99,
-    scoreCamera: 98,
-    scoreAI: 98,
-    scoreOverall: 98
-  };
-
-  const iphone = {
-    name: "iPhone 17 Pro Max",
-    tagline: "Le Standard de Cupertino (Optimisation Soft)",
-    ram: "12 Go LPDDR5X",
-    storage: "512 Go NVMe",
-    chipset: "Apple A19 Pro (3nm TSMC N3P)",
-    gpu: "Apple GPU 6-core (Ray Tracing optimisé)",
-    cooling: "Feuille de Graphite (Refroidissement Passif)",
-    ai: "Apple Intelligence (Limité, écosystème fermé)",
-    display: "6.9\" Super Retina XDR (3000 nits Peak)",
-    refresh: "120Hz ProMotion (480Hz PWM - Fatigue possible)",
-    battery: "5000 mAh (Li-ion classique)",
-    charging: "35W PD (1h30 pour une charge complète)",
-    camera: "48MP Main (Stacked Sensor) + Zoom 5x",
-    video: "4K 120fps max (Pas de 8K)",
-    audio: "Spatial Audio (Traitement logiciel efficace)",
-    build: "Titane Grade 5 + Ceramic Shield 2",
-    wifi: "Wi-Fi 7 (Antenne standard)",
-    button: "Bouton Camera Control (Tactile / Photo)",
-    scoreGaming: 94,
-    scoreCamera: 95,
-    scoreAI: 89,
-    scoreOverall: 93
-  };
-
-  const compare = (valX, valI, key) => {
-    const winX = ["ram", "battery", "charging", "display", "cooling", "ai", "camera", "storage", "video", "wifi", "refresh"].includes(key);
-    const winI = ["build", "button"].includes(key);
-    const draw = ["chipset", "audio"].includes(key);
-    return { winX, winI, draw };
-  };
-
-  const SpecRow = ({ icon: Icon, label, valX, valI, specKey }) => {
-    const { winX, winI, draw } = compare(valX, valI, specKey);
-    return (
-      <div className="mb-10 group">
-        <div className="flex items-center gap-3 mb-4 px-2">
-          <div className="p-2.5 bg-blue-500/10 dark:bg-blue-400/5 rounded-xl border border-blue-500/20 transition-transform group-hover:rotate-6">
-            <Icon size={20} className="text-blue-600 dark:text-blue-400" />
-          </div>
-          <span className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-500">{label}</span>
-        </div>
-        <div className="grid grid-cols-2 gap-4 px-1">
-          <div className={`relative p-6 rounded-[2.2rem] border-2 transition-all duration-700 ${winX || draw ? 'bg-white dark:bg-slate-800 border-green-500/60 shadow-xl scale-[1.02]' : 'bg-slate-100 dark:bg-slate-900 border-transparent opacity-60'}`}>
-            <p className={`text-[14px] font-bold leading-tight ${winX || draw ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}>{valX}</p>
-            {(winX || draw) && <div className="absolute -top-3 -right-2 bg-green-500 text-white px-3 py-1 rounded-full text-[8px] font-black shadow-lg uppercase tracking-tighter">Winner</div>}
-            <div className="mt-4 text-[9px] font-black opacity-30 tracking-[0.2em]">XIAOMI CHINA</div>
-          </div>
-          <div className={`relative p-6 rounded-[2.2rem] border-2 transition-all duration-700 ${winI || draw ? 'bg-white dark:bg-slate-800 border-green-500/60 shadow-xl scale-[1.02]' : 'bg-slate-100 dark:bg-slate-900 border-transparent opacity-60'}`}>
-            <p className={`text-[14px] font-bold leading-tight ${winI || draw ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}>{valI}</p>
-            {(winI || draw) && <div className="absolute -top-3 -right-2 bg-green-500 text-white px-3 py-1 rounded-full text-[8px] font-black shadow-lg uppercase tracking-tighter">Winner</div>}
-            <div className="mt-4 text-[9px] font-black opacity-30 tracking-[0.2em]">APPLE US</div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div className="min-h-screen bg-[#F1F5F9] dark:bg-[#020617] text-slate-900 dark:text-slate-100 font-sans pb-44">
-      
-      <header className="sticky top-0 z-[100] bg-white/60 dark:bg-[#020617]/60 backdrop-blur-3xl border-b border-slate-200/50 dark:border-slate-800/50 px-6 py-5">
-        <div className="max-w-md mx-auto flex justify-between items-center">
-          <div className="flex flex-col">
-            <h1 className="text-2xl font-black italic tracking-tighter bg-gradient-to-r from-blue-700 via-indigo-500 to-blue-400 bg-clip-text text-transparent">HARDWARE WARS</h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1 italic">VÉRITÉ TECHNIQUE 2026</p>
-          </div>
-          <div className="bg-slate-950 dark:bg-white text-white dark:text-black px-4 py-2 rounded-full text-[10px] font-black uppercase shadow-lg tracking-widest">
-            8K Ready
-          </div>
-        </div>
-      </header>
-
-      <main className={`max-w-md mx-auto p-6 transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Wars: Xiaomi vs iPhone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        {/* Banner Hero */}
-        <div className="relative overflow-hidden bg-slate-950 rounded-[3.5rem] p-10 text-white mb-14 shadow-2xl border border-slate-800 animate-slow-pan bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
-          <div className="relative z-10 text-center">
-            <h2 className="text-6xl font-black mb-6 leading-none tracking-tighter italic">NO <br/> LIES.</h2>
-            <p className="text-slate-400 text-sm leading-relaxed font-bold uppercase tracking-wider">
-              Xiaomi pulvérise l'iPhone sur le terrain de la vidéo 8K, du Gaming et de la charge.
-            </p>
-          </div>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-color: #F1F5F9;
+        }
+
+        ::-webkit-scrollbar { display: none; }
+        * { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes slow-pan {
+            from { background-position: 0% 50%; }
+            to { background-position: 100% 50%; }
+        }
+
+        .animate-slow-pan {
+            background-size: 200% 200%;
+            animation: slow-pan 15s linear infinite alternate;
+        }
+
+        .tab-active {
+            background-color: white;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            color: #2563eb;
+            transform: scale(1.03);
+        }
+
+        .dark .tab-active {
+            background-color: #1e293b;
+            color: #60a5fa;
+        }
+
+        .winner-badge {
+            position: absolute;
+            top: -12px;
+            right: -8px;
+            background-color: #22c55e;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 8px;
+            font-weight: 900;
+            text-transform: uppercase;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="dark:bg-[#020617] dark:text-slate-100">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-[100] bg-white/60 dark:bg-[#020617]/60 backdrop-blur-3xl border-b border-slate-200/50 dark:border-slate-800/50 px-6 py-5">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex flex-col">
+                <h1 class="text-2xl font-black italic tracking-tighter bg-gradient-to-r from-blue-700 via-indigo-500 to-blue-400 bg-clip-text text-transparent uppercase">HARDWARE WARS</h1>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1 italic">VÉRITÉ TECHNIQUE 2026</p>
+            </div>
+            <div class="bg-slate-950 dark:bg-white text-white dark:text-black px-4 py-2 rounded-full text-[10px] font-black uppercase shadow-lg tracking-widest">
+                8K Ready
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="max-w-md mx-auto p-6 opacity-0 translate-y-10 transition-all duration-1000">
+        
+        <!-- Banner Hero -->
+        <div class="relative overflow-hidden bg-slate-950 rounded-[3.5rem] p-10 text-white mb-14 shadow-2xl border border-slate-800 animate-slow-pan bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
+            <div class="relative z-10 text-center">
+                <h2 class="text-6xl font-black mb-6 leading-none tracking-tighter italic">NO <br/> LIES.</h2>
+                <p class="text-slate-400 text-sm leading-relaxed font-bold uppercase tracking-wider">
+                    Xiaomi pulvérise l'iPhone sur la vidéo 8K, le Gaming et la charge.
+                </p>
+            </div>
         </div>
 
-        {/* Tab Selection */}
-        <div className="flex bg-slate-200/60 dark:bg-slate-900/60 p-2 rounded-[2.5rem] mb-14">
-          <button 
-            onClick={() => setActiveTab('specs')}
-            className={`flex-1 py-5 rounded-[2rem] text-[11px] font-black transition-all duration-500 uppercase tracking-widest ${activeTab === 'specs' ? 'bg-white dark:bg-slate-800 shadow-2xl text-blue-600 scale-[1.03]' : 'text-slate-500 opacity-60'}`}
-          >
-            Base de Données
-          </button>
-          <button 
-            onClick={() => setActiveTab('scores')}
-            className={`flex-1 py-5 rounded-[2rem] text-[11px] font-black transition-all duration-500 uppercase tracking-widest ${activeTab === 'scores' ? 'bg-white dark:bg-slate-800 shadow-2xl text-blue-600 scale-[1.03]' : 'text-slate-500 opacity-60'}`}
-          >
-            Verdict Final
-          </button>
+        <!-- Tab Selection -->
+        <div class="flex bg-slate-200/60 dark:bg-slate-900/60 p-2 rounded-[2.5rem] mb-14">
+            <button onclick="switchTab('specs')" id="tab-specs" class="flex-1 py-5 rounded-[2rem] text-[11px] font-black transition-all duration-500 uppercase tracking-widest tab-active">
+                Base de Données
+            </button>
+            <button onclick="switchTab('scores')" id="tab-scores" class="flex-1 py-5 rounded-[2rem] text-[11px] font-black transition-all duration-500 uppercase tracking-widest text-slate-500 opacity-60">
+                Verdict Final
+            </button>
         </div>
 
-        {activeTab === 'specs' ? (
-          <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000">
-            <SpecRow icon={Cpu} label="Micro-Architecture" valX={xiaomi.chipset} valI={iphone.chipset} specKey="chipset" />
-            <SpecRow icon={Video} label="Capacités Vidéo" valX={xiaomi.video} valI={iphone.video} specKey="video" />
-            <SpecRow icon={Eye} label="Optique & Capteur" valX={xiaomi.camera} valI={iphone.camera} specKey="camera" />
-            <SpecRow icon={Battery} label="Capacité Batterie" valX={xiaomi.battery} valI={iphone.battery} specKey="battery" />
-            <SpecRow icon={Zap} label="Charge Réelle" valX={xiaomi.charging} valI={iphone.charging} specKey="charging" />
-            <SpecRow icon={Layers} label="RAM & Débit" valX={xiaomi.ram} valI={iphone.ram} specKey="ram" />
-            <SpecRow icon={HardDrive} label="Vitesse Stockage" valX={xiaomi.storage} valI={iphone.storage} specKey="storage" />
-            <SpecRow icon={Brain} label="IA (Software/Cloud)" valX={xiaomi.ai} valI={iphone.ai} specKey="ai" />
-            <SpecRow icon={Monitor} label="Protection Yeux (PWM)" valX={xiaomi.refresh} valI={iphone.refresh} specKey="refresh" />
-            <SpecRow icon={Monitor} label="Luminosité Écran" valX={xiaomi.display} valI={iphone.display} specKey="display" />
-            <SpecRow icon={Wind} label="Système Thermique" valX={xiaomi.cooling} valI={iphone.cooling} specKey="cooling" />
-            <SpecRow icon={Wifi} label="Connectivité" valX={xiaomi.wifi} valI={iphone.wifi} specKey="wifi" />
-            <SpecRow icon={MousePointer2} label="Interface Physique" valX={xiaomi.button} valI={iphone.button} specKey="button" />
-            <SpecRow icon={Target} label="Matériaux" valX={xiaomi.build} valI={iphone.build} specKey="build" />
-          </div>
-        ) : (
-          <div className="space-y-12 animate-in fade-in zoom-in-95 duration-700">
-            {/* Gaming Performance Card */}
-            <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] shadow-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-6 opacity-5">
-                <Gamepad2 size={100} />
-              </div>
-              <h3 className="font-black uppercase tracking-tighter text-2xl mb-8 flex items-center gap-4">
-                <Gamepad2 className="text-orange-500" />
-                Performance Gaming
-              </h3>
-              <div className="space-y-8">
-                <div>
-                  <div className="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400 tracking-widest">
-                    <span>Xiaomi (FPS Stable / 12,000mm² VC)</span>
-                    <span className="text-orange-500">99%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 shadow-inner">
-                    <div className="bg-gradient-to-r from-orange-400 to-orange-600 h-full rounded-full transition-all duration-[1.5s]" style={{ width: `99%` }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400 tracking-widest">
-                    <span>iPhone (Chauffe / FPS instables)</span>
-                    <span className="text-blue-600">91%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 shadow-inner">
-                    <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-full rounded-full transition-all duration-[1.5s]" style={{ width: `91%` }}></div>
-                  </div>
-                </div>
-              </div>
-              <p className="mt-10 text-[12px] text-slate-500 leading-relaxed font-bold italic">
-                LE RÉEL : Le GPU Adreno du Xiaomi, épaulé par une immense chambre à vapeur, permet de jouer à Genshin Impact ou Warzone à 120 FPS constant sans que le téléphone ne brûle les mains. L'iPhone bride sa puissance après 15 minutes.
-              </p>
-            </div>
-
-            {/* Vidéo Card */}
-            <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] shadow-2xl border border-slate-100 dark:border-slate-800">
-              <h3 className="font-black uppercase tracking-tighter text-2xl mb-8 flex items-center gap-4">
-                <Video className="text-red-500" />
-                Domination Vidéo
-              </h3>
-              <div className="space-y-8">
-                <div>
-                  <div className="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400 tracking-widest">
-                    <span>Xiaomi (8K / 4K 120 Pro)</span>
-                    <span className="text-red-500">99%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 shadow-inner">
-                    <div className="bg-gradient-to-r from-red-400 to-red-600 h-full rounded-full transition-all duration-[1.5s]" style={{ width: `99%` }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400 tracking-widest">
-                    <span>iPhone (4K 120 Max)</span>
-                    <span className="text-blue-600">92%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 shadow-inner">
-                    <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-full rounded-full transition-all duration-[1.5s]" style={{ width: `92%` }}></div>
-                  </div>
-                </div>
-              </div>
-              <p className="mt-10 text-[12px] text-slate-500 leading-relaxed font-bold italic">
-                LE RÉEL : Xiaomi débloque la 8K 30fps sur tous les objectifs, là où Apple reste conservateur. En post-production, la marge de manœuvre sur le Xiaomi est incomparable.
-              </p>
-            </div>
-
-            {/* Thermal Card */}
-            <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] shadow-2xl border border-slate-100 dark:border-slate-800">
-              <h3 className="font-black uppercase tracking-tighter text-2xl mb-8 flex items-center gap-4">
-                <ThermometerSun className="text-orange-500" />
-                Stabilité Thermique
-              </h3>
-              <div className="space-y-8">
-                <div>
-                  <div className="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400">
-                    <span>Xiaomi (Ice-Vapor Cooling)</span>
-                    <span className="text-orange-500">98%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 overflow-hidden">
-                    <div className="bg-gradient-to-r from-orange-400 to-orange-600 h-full rounded-full" style={{ width: `98%` }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400">
-                    <span>iPhone (Passif / Throttle)</span>
-                    <span className="text-blue-600">85%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 overflow-hidden">
-                    <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-full rounded-full" style={{ width: `85%` }}></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Verdict Card */}
-            <div className="relative p-2 rounded-[4.5rem] bg-gradient-to-tr from-slate-900 via-indigo-900 to-blue-900">
-              <div className="bg-[#020617] rounded-[4.2rem] p-14 text-center">
-                <Trophy size={90} className="mx-auto mb-8 text-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.7)]" />
-                <h3 className="text-sm font-black text-blue-400 uppercase tracking-[0.5em] mb-4">Supreme Tech</h3>
-                <p className="text-5xl font-black text-white mb-10 tracking-tighter italic">Xiaomi Wins.</p>
-                <div className="bg-white/10 p-10 rounded-[3rem] border border-white/10 text-[14px] text-slate-300 leading-relaxed font-bold italic shadow-inner">
-                  "Xiaomi propose 50% de batterie en plus, une charge 4x plus rapide et une résolution vidéo 4x plus élevée. Apple est une marque de luxe, Xiaomi est un outil de puissance."
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
-
-      <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 w-[85%] max-sm:w-[92%] max-w-sm bg-white/40 dark:bg-slate-900/40 backdrop-blur-3xl border border-white/20 dark:border-slate-800/40 rounded-[3.5rem] p-5 shadow-2xl z-[150]">
-        <div className="flex justify-around items-center">
-          <button onClick={() => setActiveTab('specs')} className={`flex flex-col items-center gap-2 ${activeTab === 'specs' ? 'text-blue-600 scale-110' : 'text-slate-400 opacity-50'}`}>
-            <Smartphone size={26} strokeWidth={2.5} />
-            <span className="text-[9px] font-black uppercase">Specs</span>
-          </button>
-          <button onClick={() => setActiveTab('scores')} className={`flex flex-col items-center gap-2 ${activeTab === 'scores' ? 'text-blue-600 scale-110' : 'text-slate-400 opacity-50'}`}>
-            <Trophy size={26} strokeWidth={2.5} />
-            <span className="text-[9px] font-black uppercase">Verdict</span>
-          </button>
+        <!-- Contenu Specs -->
+        <div id="content-specs" class="space-y-10">
+            <!-- Les lignes de specs seront générées par JS -->
         </div>
-      </nav>
-    </div>
-  );
-};
 
-export default App;
+        <!-- Contenu Verdict -->
+        <div id="content-scores" class="hidden space-y-12">
+            <!-- Verdict Gaming -->
+            <div class="bg-white dark:bg-slate-900 p-10 rounded-[3rem] shadow-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+                <h3 class="font-black uppercase tracking-tighter text-2xl mb-8 flex items-center gap-4 text-orange-500">
+                    <i class="fas fa-gamepad"></i> Performance Gaming
+                </h3>
+                <div class="space-y-8">
+                    <div>
+                        <div class="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400">
+                            <span>Xiaomi (FPS Stable / 12k mm² VC)</span>
+                            <span class="text-orange-500">99%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 shadow-inner">
+                            <div class="bg-gradient-to-r from-orange-400 to-orange-600 h-full rounded-full w-[99%]"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400">
+                            <span>iPhone (Chauffe / Throttle)</span>
+                            <span class="text-blue-600">91%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 shadow-inner">
+                            <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-full rounded-full w-[91%]"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-10 text-[12px] text-slate-500 leading-relaxed font-bold italic">
+                    LE RÉEL : Le GPU Adreno du Xiaomi, épaulé par une immense chambre à vapeur, permet de jouer à 120 FPS constant sans baisse de régime. L'iPhone chauffe et bride sa puissance après 15 min.
+                </p>
+            </div>
+
+            <!-- Verdict Vidéo -->
+            <div class="bg-white dark:bg-slate-900 p-10 rounded-[3rem] shadow-2xl border border-slate-100 dark:border-slate-800">
+                <h3 class="font-black uppercase tracking-tighter text-2xl mb-8 flex items-center gap-4 text-red-500">
+                    <i class="fas fa-video"></i> Domination Vidéo
+                </h3>
+                <div class="space-y-8">
+                    <div>
+                        <div class="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400">
+                            <span>Xiaomi (8K / 4K 120 Pro)</span>
+                            <span class="text-red-500">99%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 shadow-inner">
+                            <div class="bg-gradient-to-r from-red-400 to-red-600 h-full rounded-full w-[99%]"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[12px] mb-4 font-black uppercase text-slate-400">
+                            <span>iPhone (4K 120 Max Only)</span>
+                            <span class="text-blue-600">92%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-5 p-1.5 shadow-inner">
+                            <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-full rounded-full w-[92%]"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-10 text-[12px] text-slate-500 leading-relaxed font-bold italic">
+                    LE RÉEL : Xiaomi débloque la 8K 30fps sur tous les objectifs. En post-production, la résolution 4x supérieure du Xiaomi offre une marge de crop pro inexistante sur iPhone.
+                </p>
+            </div>
+
+            <!-- Verdict Final Card -->
+            <div class="relative p-2 rounded-[4.5rem] bg-gradient-to-tr from-slate-900 via-indigo-900 to-blue-900">
+                <div class="bg-[#020617] rounded-[4.2rem] p-14 text-center">
+                    <i class="fas fa-trophy text-7xl mb-8 text-yellow-400 opacity-90"></i>
+                    <h3 class="text-sm font-black text-blue-400 uppercase tracking-[0.5em] mb-4">Supreme Tech</h3>
+                    <p class="text-5xl font-black text-white mb-10 tracking-tighter italic">Xiaomi Wins.</p>
+                    <div class="bg-white/10 p-10 rounded-[3rem] border border-white/10 text-[14px] text-slate-300 leading-relaxed font-bold italic shadow-inner">
+                        "Xiaomi propose 50% de batterie en plus, une charge 4x plus rapide et une résolution vidéo 8K. Apple est une marque de luxe, Xiaomi est un monstre de puissance."
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Navigation -->
+    <nav class="fixed bottom-10 left-1/2 -translate-x-1/2 w-[85%] max-w-sm bg-white/40 dark:bg-slate-900/40 backdrop-blur-3xl border border-white/20 dark:border-slate-800/40 rounded-[3.5rem] p-5 shadow-2xl z-[150]">
+        <div class="flex justify-around items-center">
+            <button onclick="switchTab('specs')" class="flex flex-col items-center gap-2 text-blue-600">
+                <i class="fas fa-mobile-alt text-2xl"></i>
+                <span class="text-[9px] font-black uppercase">Specs</span>
+            </button>
+            <button onclick="switchTab('scores')" class="flex flex-col items-center gap-2 text-slate-400 opacity-50">
+                <i class="fas fa-crown text-2xl"></i>
+                <span class="text-[9px] font-black uppercase">Verdict</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        const data = {
+            xiaomi: {
+                chipset: "Snapdragon 8 Elite Gen 5 (3nm TSMC N3E)",
+                video: "8K 30fps / 4K 120fps (Tous capteurs)",
+                camera: "Sony LYT-900 (1 pouce) + Leica Summilux",
+                battery: "7500 mAh (Silicium-Carbone)",
+                charging: "120W Filaire / 80W Sans-fil (22 min)",
+                ram: "16 Go LPDDR5X (8533 Mbps)",
+                storage: "512 Go UFS 4.1 (Record 4.5GB/s)",
+                ai: "HyperMind AI 3.0 (Automatisation totale OS)",
+                refresh: "120Hz + 3840Hz PWM (Zéro fatigue)",
+                display: "6.9\" LTPO 2.0 (3800 nits Peak)",
+                cooling: "Ice-Vapor Chamber 12,000mm² (Actif)",
+                wifi: "Wi-Fi 7 (Vitesse triple antenne)",
+                button: "Bouton Action Programmable",
+                build: "Céramique Unibody + Alu Aéro"
+            },
+            iphone: {
+                chipset: "Apple A19 Pro (3nm TSMC N3P)",
+                video: "4K 120fps max (Pas de 8K)",
+                camera: "48MP Main (Stacked) + Zoom 5x",
+                battery: "5000 mAh (Li-ion classique)",
+                charging: "35W PD (1h30 pour 100%)",
+                ram: "12 Go LPDDR5X",
+                storage: "512 Go NVMe",
+                ai: "Apple Intelligence (Limité)",
+                refresh: "120Hz ProMotion (480Hz PWM)",
+                display: "6.9\" Super Retina XDR (3000 nits)",
+                cooling: "Feuille de Graphite (Passif)",
+                wifi: "Wi-Fi 7 (Standard)",
+                button: "Bouton Camera Control (Photo)",
+                build: "Titane Grade 5 + Ceramic Shield"
+            }
+        };
+
+        const specs = [
+            { id: 'chipset', label: 'Micro-Architecture', icon: 'fa-microchip' },
+            { id: 'video', label: 'Capacités Vidéo', icon: 'fa-video' },
+            { id: 'camera', label: 'Optique & Capteur', icon: 'fa-camera' },
+            { id: 'battery', label: 'Capacité Batterie', icon: 'fa-battery-full' },
+            { id: 'charging', label: 'Charge Réelle', icon: 'fa-bolt' },
+            { id: 'ram', label: 'RAM & Débit', icon: 'fa-memory' },
+            { id: 'storage', label: 'Vitesse Stockage', icon: 'fa-hdd' },
+            { id: 'ai', label: 'IA (Soft/Cloud)', icon: 'fa-brain' },
+            { id: 'refresh', label: 'Protection Yeux (PWM)', icon: 'fa-eye' },
+            { id: 'display', label: 'Luminosité Écran', icon: 'fa-desktop' },
+            { id: 'cooling', label: 'Système Thermique', icon: 'fa-wind' },
+            { id: 'wifi', label: 'Connectivité', icon: 'fa-wifi' },
+            { id: 'button', label: 'Interface Physique', icon: 'fa-fingerprint' },
+            { id: 'build', label: 'Matériaux', icon: 'fa-shield-alt' }
+        ];
+
+        const xiaomiWins = ["ram", "battery", "charging", "display", "cooling", "ai", "camera", "storage", "video", "wifi", "refresh"];
+        const iphoneWins = ["build", "button"];
+
+        function initSpecs() {
+            const container = document.getElementById('content-specs');
+            specs.forEach(spec => {
+                const isXiaomiWin = xiaomiWins.includes(spec.id);
+                const isIphoneWin = iphoneWins.includes(spec.id);
+                const isDraw = !isXiaomiWin && !isIphoneWin;
+
+                const row = `
+                    <div class="group">
+                        <div class="flex items-center gap-3 mb-4 px-2">
+                            <div class="p-2.5 bg-blue-500/10 dark:bg-blue-400/5 rounded-xl border border-blue-500/20">
+                                <i class="fas ${spec.icon} text-blue-600 dark:text-blue-400"></i>
+                            </div>
+                            <span class="text-[11px] font-black uppercase tracking-[0.25em] text-slate-500">${spec.label}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 px-1">
+                            <div class="relative p-6 rounded-[2.2rem] border-2 transition-all duration-700 ${isXiaomiWin || isDraw ? 'bg-white dark:bg-slate-800 border-green-500/60 shadow-xl scale-[1.02]' : 'bg-slate-100 dark:bg-slate-900 border-transparent opacity-60'}">
+                                <p class="text-[14px] font-bold leading-tight ${isXiaomiWin || isDraw ? 'text-slate-900 dark:text-white' : 'text-slate-500'}">${data.xiaomi[spec.id]}</p>
+                                ${isXiaomiWin || isDraw ? '<div class="winner-badge">Winner</div>' : ''}
+                                <div class="mt-4 text-[9px] font-black opacity-30 tracking-[0.2em]">XIAOMI CHINA</div>
+                            </div>
+                            <div class="relative p-6 rounded-[2.2rem] border-2 transition-all duration-700 ${isIphoneWin || isDraw ? 'bg-white dark:bg-slate-800 border-green-500/60 shadow-xl scale-[1.02]' : 'bg-slate-100 dark:bg-slate-900 border-transparent opacity-60'}">
+                                <p class="text-[14px] font-bold leading-tight ${isIphoneWin || isDraw ? 'text-slate-900 dark:text-white' : 'text-slate-500'}">${data.iphone[spec.id]}</p>
+                                ${isIphoneWin || isDraw ? '<div class="winner-badge">Winner</div>' : ''}
+                                <div class="mt-4 text-[9px] font-black opacity-30 tracking-[0.2em]">APPLE US</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += row;
+            });
+        }
+
+        function switchTab(tab) {
+            const specsTab = document.getElementById('tab-specs');
+            const scoresTab = document.getElementById('tab-scores');
+            const contentSpecs = document.getElementById('content-specs');
+            const contentScores = document.getElementById('content-scores');
+
+            if (tab === 'specs') {
+                specsTab.classList.add('tab-active');
+                specsTab.classList.remove('text-slate-500', 'opacity-60');
+                scoresTab.classList.remove('tab-active');
+                scoresTab.classList.add('text-slate-500', 'opacity-60');
+                contentSpecs.classList.remove('hidden');
+                contentScores.classList.add('hidden');
+            } else {
+                scoresTab.classList.add('tab-active');
+                scoresTab.classList.remove('text-slate-500', 'opacity-60');
+                specsTab.classList.remove('tab-active');
+                specsTab.classList.add('text-slate-500', 'opacity-60');
+                contentSpecs.classList.add('hidden');
+                contentScores.classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.onload = () => {
+            initSpecs();
+            setTimeout(() => {
+                document.getElementById('main-content').classList.remove('opacity-0', 'translate-y-10');
+            }, 100);
+        };
+    </script>
+</body>
+</html>
