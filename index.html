@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@700&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
@@ -53,6 +53,10 @@
             text-transform: uppercase;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
+
+        .countdown-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
     </style>
 </head>
 <body class="dark:bg-[#020617] dark:text-slate-100">
@@ -73,9 +77,18 @@
     <main id="main-content" class="max-w-md mx-auto p-6 opacity-0 translate-y-10 transition-all duration-1000">
         
         <!-- Banner Hero -->
-        <div class="relative overflow-hidden bg-slate-950 rounded-[3.5rem] p-10 text-white mb-14 shadow-2xl border border-slate-800 animate-slow-pan bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
-            <div class="relative z-10 text-center">
-                <h2 class="text-6xl font-black mb-6 leading-none tracking-tighter italic">NO <br/> LIES.</h2>
+        <div class="relative overflow-hidden bg-slate-950 rounded-[3.5rem] p-10 text-white mb-14 shadow-2xl border border-slate-800 animate-slow-pan bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-center">
+            <div class="relative z-10">
+                <h2 class="text-6xl font-black mb-4 leading-none tracking-tighter italic">NO <br/> LIES.</h2>
+                
+                <!-- Countdown Section (Date fixe pour tout le monde) -->
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 mb-6 transition-all hover:scale-105">
+                    <span class="text-[8px] font-black uppercase tracking-[0.3em] text-blue-400 mr-1">Launch in:</span>
+                    <div id="countdown" class="countdown-font text-xs font-bold text-white tracking-widest">
+                        00D 00H 00M 00S
+                    </div>
+                </div>
+
                 <p class="text-slate-400 text-sm leading-relaxed font-bold uppercase tracking-wider">
                     Xiaomi pulvérise l'iPhone sur la vidéo 8K, le Gaming et la charge.
                 </p>
@@ -300,8 +313,42 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        function startCountdown() {
+            // DATE FIXE : 10 Mars 2026 à 00h00
+            const targetDate = new Date("March 10, 2026 00:00:00").getTime();
+
+            function update() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                const display = document.getElementById("countdown");
+                
+                if (distance < 0) {
+                    display.innerHTML = "LAUNCHING NOW...";
+                    return;
+                }
+
+                // Formatage constant pour éviter les sauts de texte
+                const d = days.toString().padStart(2, '0');
+                const h = hours.toString().padStart(2, '0');
+                const m = minutes.toString().padStart(2, '0');
+                const s = seconds.toString().padStart(2, '0');
+
+                display.innerHTML = `${d}D ${h}H ${m}M ${s}S`;
+            }
+
+            setInterval(update, 1000);
+            update();
+        }
+
         window.onload = () => {
             initSpecs();
+            startCountdown();
             setTimeout(() => {
                 document.getElementById('main-content').classList.remove('opacity-0', 'translate-y-10');
             }, 100);
